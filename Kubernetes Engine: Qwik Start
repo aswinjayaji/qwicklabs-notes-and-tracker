@@ -1,0 +1,25 @@
+Task 1: Set a default compute zone
+
+gcloud config set compute/zone us-central1-a
+
+Task 2: Create a GKE cluster
+
+gcloud container clusters create [CLUSTER-NAME]
+
+Task 3: Get authentication credentials for the cluster
+
+gcloud container clusters get-credentials [CLUSTER-NAME]
+
+Task 4: Deploy an application to the cluster
+
+kubectl create deployment hello-server --image=gcr.io/google-samples/hello-app:1.0
+
+Task 4.1 To create a Kubernetes Service, which is a Kubernetes resource that lets you expose your application to external traffic, run the following kubectl expose command:
+
+kubectl expose deployment hello-server --type=LoadBalancer --port 8080
+
+kubectl get service
+
+Task 5: Deleting the cluster
+
+gcloud container clusters delete [CLUSTER-NAME]
