@@ -1,0 +1,230 @@
+Task 1 :Set up your environment
+1.Set the default compute zone:
+
+gcloud config set compute/zone us-central1-f
+
+2.Create a Kubernetes Engine using the Spinnaker tutorial sample application:
+
+gcloud container clusters create spinnaker-tutorial \
+    --machine-type=n1-standard-2
+    
+3.Create the service account:    
+    
+gcloud iam service-accounts create spinnaker-account \
+    --display-name spinnaker-account
+
+4.Store the service account email address and your current project ID in environment variables for use in later commands:
+
+export SA_EMAIL=$(gcloud iam service-accounts list \
+    --filter="displayName:spinnaker-account" \
+    --format='value(email)')
+
+export PROJECT=$(gcloud info --format='value(config.project)')
+
+5.Bind the storage.admin role to your service account:
+
+gcloud projects add-iam-policy-binding $PROJECT \
+    --role roles/storage.admin \
+    --member serviceAccount:$SA_EMAIL
+
+6.Download the service account key. In a later step, you will install Spinnaker and upload this key to Kubernetes Engine:
+
+gcloud iam service-accounts keys create spinnaker-sa.json \
+     --iam-account $SA_EMAIL
+     
+task2:Set up Cloud Pub/Sub to trigger Spinnaker pipelines
+
+1.Create the Cloud Pub/Sub topic for notifications from Container Registry.
+
+gcloud pubsub topics create projects/$PROJECT/topics/gcr
+
+2.Create a subscription that Spinnaker can read from to receive notifications of images being pushed.
+
+gcloud pubsub subscriptions create gcr-triggers \
+    --topic projects/${PROJECT}/topics/gcr
+
+3.Give Spinnaker's service account permissions to read from the gcr-triggers subscription.
+
+export SA_EMAIL=$(gcloud iam service-accounts list \
+    --filter="displayName:spinnaker-account" \
+    --format='value(email)')
+
+gcloud beta pubsub subscriptions add-iam-policy-binding gcr-triggers \
+    --role roles/pubsub.subscriber --member serviceAccount:$SA_EMAIL
+
+Task 3:Deploying Spinnaker using Helm
+
+1.Download and install the helm binary:
+
+wget https://get.helm.sh/helm-v3.1.1-linux-amd64.tar.gz
+
+tar zxfv helm-v3.1.1-linux-amd64.tar.gz
+
+cp linux-amd64/helm .
+
+2.Grant Helm the cluster-admin role in your cluster:
+
+kubectl create clusterrolebinding user-admin-binding \
+    --clusterrole=cluster-admin --user=$(gcloud config get-value account)
+
+3.Grant Spinnaker the cluster-admin role so it can deploy resources across all namespaces:
+
+kubectl create clusterrolebinding --clusterrole=cluster-admin \
+    --serviceaccount=default:default spinnaker-admin
+
+4.Add the stable charts deployments to Helm's usable repositories (includes Spinnaker):
+
+./helm repo add stable https://charts.helm.sh/stable
+./helm repo update
+     
+     Configure Spinnaker
+   
+   
+1.Still in Cloud Shell, create a bucket for Spinnaker to store its pipeline configuration:
+
+export PROJECT=$(gcloud info \
+    --format='value(config.project)')
+
+export BUCKET=$PROJECT-spinnaker-config
+
+gsutil mb -c regional -l us-central1 gs://$BUCKET
+
+2.Run the following command to create a spinnaker-config.yaml file, which describes how Helm should install Spinnaker:
+
+export SA_JSON=$(cat spinnaker-sa.json)
+export PROJECT=$(gcloud info --format='value(config.project)')
+export BUCKET=$PROJECT-spinnaker-config
+cat > spinnaker-config.yaml <<EOF
+gcs:
+  enabled: true
+  bucket: $BUCKET
+  project: $PROJECT
+  jsonKey: '$SA_JSON'
+dockerRegistries:
+- name: gcr
+  address: https://gcr.io
+  username: _json_key
+  password: '$SA_JSON'
+  email: 1234@5678.com
+# Disable minio as the default storage backend
+minio:
+  enabled: false
+# Configure Spinnaker to enable GCP services
+halyard:
+  spinnakerVersion: 1.19.4
+  image:
+    repository: us-docker.pkg.dev/spinnaker-community/docker/halyard
+    tag: 1.32.0
+    pullSecrets: []
+  additionalScripts:
+    create: true
+    data:
+      enable_gcs_artifacts.sh: |-
+        \$HAL_COMMAND config artifact gcs account add gcs-$PROJECT --json-path /opt/gcs/key.json
+        \$HAL_COMMAND config artifact gcs enable
+      enable_pubsub_triggers.sh: |-
+        \$HAL_COMMAND config pubsub google enable
+        \$HAL_COMMAND config pubsub google subscription add gcr-triggers \
+          --subscription-name gcr-triggers \
+          --json-path /opt/gcs/key.json \
+          --project $PROJECT \
+          --message-format GCR
+EOF
+     
+     Deploy the Spinnaker chart
+     
+1.Use the Helm command-line interface to deploy the chart with your configuration set:
+
+./helm install -n default cd stable/spinnaker -f spinnaker-config.yaml \
+           --version 2.0.0-rc9 --timeout 10m0s --wait
+           
+----------The installation typically takes 5-8 minutes to complete.----------------
+2.After the command completes, run the following command to set up port forwarding to Spinnaker from Cloud Shell:
+
+export DECK_POD=$(kubectl get pods --namespace default -l "cluster=spin-deck" \
+    -o jsonpath="{.items[0].metadata.name}")
+    
+kubectl port-forward --namespace default $DECK_POD 8080:9000 >> /dev/null &
+     
+3.To open the Spinnaker user interface, click the Web Preview icon at the top of the Cloud Shell window and select Preview on port 8080.
+     
+     Create your source code repository
+     
+1.In Cloud Shell tab and download the sample application source code:
+
+gsutil -m cp -r gs://spls/gsp114/sample-app.tar .
+
+2.Unpack the source code:
+
+mkdir sample-app
+tar xvf sample-app.tar -C ./sample-app
+
+3.Change directories to the source code:
+
+cd sample-app
+
+4.Set the username and email address for your Git commits in this repository. Replace [USERNAME] with a username you create:
+
+git config --global user.email "$(gcloud config get-value core/account)"
+
+git config --global user.name "[USERNAME]"
+
+5.Make the initial commit to your source code repository:
+
+git init
+
+git add .
+
+git commit -m "Initial commit"
+
+6.Create a repository to host your code:
+
+gcloud source repos create sample-app
+
+-----Disregard the "you may be billed for this repository" message----------
+
+git config credential.helper gcloud.sh
+
+7.Add your newly created repository as remote:
+
+export PROJECT=$(gcloud info --format='value(config.project)')
+
+git remote add origin https://source.developers.google.com/p/$PROJECT/r/sample-app
+
+8.Push your code to the new repository's master branch:
+
+git push origin master
+
+9.Check that you can see your source code in the Console by clicking Navigation Menu > Source Repositories.
+     
+     Prepare your Kubernetes Manifests for use in Spinnaker
+
+1.Create the bucket:
+
+export PROJECT=$(gcloud info --format='value(config.project)')
+
+gsutil mb -l us-central1 gs://$PROJECT-kubernetes-manifests
+
+2.Enable versioning on the bucket so that you have a history of your manifests:
+
+gsutil versioning set on gs://$PROJECT-kubernetes-manifests
+
+3.Set the correct project ID in your kubernetes deployment manifests:
+
+sed -i s/PROJECT/$PROJECT/g k8s/deployments/*
+
+4.Commit the changes to the repository:
+
+git commit -a -m "Set project ID"
+
+  Build your image
+  
+1.In Cloud Shell, still in the sample-app directory, create a Git tag:
+
+git tag v1.0.0
+
+2.Push the tag:
+
+git push --tags
+     
+     
