@@ -21,8 +21,8 @@ def csvupload(request):
      next(io_string)
      for column in csv.reader(io_string, delimiter=',', quotechar="|"):
             _, created = Profile.objects.update_or_create(
-            name=column[0],
-            email=column[1],
+            studentname=column[0],
+            studentemail=column[1],
             institution=column[2],
             date_joined=column[3],
             EntrolmentStatus=column[4],
