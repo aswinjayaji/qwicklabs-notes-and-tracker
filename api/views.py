@@ -3,6 +3,9 @@ from django.shortcuts import render
 from django.contrib import messages
 from api.models import Profile
 # Create your views here.
+from api.serializers import ProfileSerializer
+from rest_framework import routers, viewsets
+
 
 def csvupload(request):
      template = 'csvupload.html'
@@ -33,4 +36,11 @@ def csvupload(request):
      context = {}
      return render(request, template, context)
      
-     
+################################################################
+ 
+class ProfileViewSet(viewsets.ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer  
+
+router = routers.DefaultRouter()
+router.register(r'Profile', ProfileViewSet)

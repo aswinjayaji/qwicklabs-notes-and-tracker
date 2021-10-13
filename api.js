@@ -1,16 +1,6 @@
-const apiResult = [{
-    title: "#fee4cb",
-    description: "desc1",
-    output: "20%"
-  }, {
-    title: "#e9e7fd",
-    description: "desc2",
-    output: "70%"
-  }, {
-    title: "#c8f7dc",
-    description: "desc3",
-    output: "80%"
-  }];
+const apiResult =fetch('http://127.0.0.1:8000/Profile/')
+.then(response => response.json())
+.then(data => console.log(data))
   const container = document.getElementById('iteratorcard');
   apiResult.forEach((result, idx) => {
     // Create card element
@@ -19,9 +9,9 @@ const apiResult = [{
 
 let content =
 `<div class='project-box-wrapper'>
-<div class="project-box" style="background-color: ${result.title}">
+<div class="project-box" style="background-color: ${result.studentname}">
   <div class="project-box-header">
-    <span>December 1${idx}, 2020</span>
+    <span>${result.date_joined}</span>
     <div class="more-wrapper">
       <button class="project-btn-more">
         <svg
@@ -44,7 +34,7 @@ let content =
     </div>
   </div>
   <div class="project-box-content-header">
-    <p class="box-content-header">${result.description}</p>
+    <p class="box-content-header">${result.EntrolmentStatus}</p>
     <p class="box-content-subheader">Prototyping</p>
   </div>
   <div class="box-progress-wrapper">
@@ -55,7 +45,7 @@ let content =
         style="width: 60%; background-color: #ff942e"
       ></span>
     </div>
-    <p class="box-progress-percentage">${result.output}</p>
+    <p class="box-progress-percentage">${result.track1}</p>
   </div>
   <div class="project-box-footer">
     <div class="participants">
