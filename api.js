@@ -1,6 +1,16 @@
-const apiResult =fetch('http://127.0.0.1:8000/Profile/')
-.then(response => response.json())
-.then(data => console.log(data))
+async function getUsers() {
+  let url = 'http://127.0.0.1:8000/Profile/';
+  try {
+      let res = await fetch(url);
+      console.log(res);
+      return await res.json();
+  } catch (error) {
+      console.log(error);
+  }
+}
+async function renderUser() {
+  let apiResult = await getUsers();
+  console.log(apiResult);
   const container = document.getElementById('iteratorcard');
   apiResult.forEach((result, idx) => {
     // Create card element
@@ -45,7 +55,7 @@ let content =
         style="width: 60%; background-color: #ff942e"
       ></span>
     </div>
-    <p class="box-progress-percentage">${result.track1}</p>
+    <p class="box-progress-percentage">${idx}</p>
   </div>
   <div class="project-box-footer">
     <div class="participants">
@@ -82,3 +92,5 @@ let content =
 </div>`;
     container.innerHTML+=content;
   });
+}
+renderUser();

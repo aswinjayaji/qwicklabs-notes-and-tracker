@@ -23,6 +23,7 @@ def csvupload(request):
      io_string = io.StringIO(data_set)
      next(io_string)
      for column in csv.reader(io_string, delimiter=',', quotechar="|"):
+            print(type(column[0]))
             _, created = Profile.objects.update_or_create(
             studentname=column[0],
             studentemail=column[1],
@@ -43,4 +44,4 @@ class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer  
 
 router = routers.DefaultRouter()
-router.register(r'Profile', ProfileViewSet)
+router.register('Profile', ProfileViewSet)
