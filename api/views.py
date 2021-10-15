@@ -15,10 +15,9 @@ def datesplit(date):
         return "October "+date[2]
 def csvupload(request):
      template = 'csvupload.html'
-     data = Profile.objects.all()
+    #  data = Profile.objects.all()
      prompt = {
-        'order': 'Order of the CSV should be name,email,institution,date_joined,EntrolmentStatus,qwicklabsurl,track1,track2',
-        'profiles': data    
+        'order': 'Order of the CSV should be name,email,institution,date_joined,EntrolmentStatus,qwicklabsurl,track1,track2',   
               }
      if request.method == 'GET':
          return render(request, template, prompt)
@@ -45,9 +44,9 @@ def csvupload(request):
      
 ################################################################
  
-class ProfileViewSet(viewsets.ModelViewSet):
-    queryset = Profile.objects.order_by('track1' , 'track2').reverse()
-    serializer_class = ProfileSerializer  
+# class ProfileViewSet(viewsets.ModelViewSet):
+#     queryset = Profile.objects.order_by('track1' , 'track2').reverse()
+#     serializer_class = ProfileSerializer  
 # class statusViewSet(viewsets.ViewSet):
 #     def list(self, request):
 #         queryset =  Profile.objects.all()
@@ -68,5 +67,5 @@ class ProfileViewSet(viewsets.ModelViewSet):
 #             )
     
 router = routers.DefaultRouter()
-router.register('Profile', ProfileViewSet)
+# router.register('Profile', ProfileViewSet)
 # router.register('status',statusViewSet,basename='status')
