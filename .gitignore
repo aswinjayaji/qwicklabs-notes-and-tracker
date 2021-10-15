@@ -1,0 +1,6 @@
+api/migrations
+trackerapp/__pycache__
+db.sqlite3
+api/__init__.py
+api/__pycache__
+trackerapp/__init__.py
