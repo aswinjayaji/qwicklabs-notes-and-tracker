@@ -1,5 +1,5 @@
 async function getUsers() {
-  let url = 'https://a30daysofgooglecloud.herokuapp.com/Profile/';
+  let url = 'http://127.0.0.1:8000/Profile/';
   try {
       let res = await fetch(url);
       console.log(res);
@@ -89,7 +89,7 @@ let content =
 
 
 async function getstatus() {
-  let url = 'https://a30daysofgooglecloud.herokuapp.com/status/';
+  let url = 'http://127.0.0.1:8000/status/';
   try {
       let res = await fetch(url);
       console.log(res);
