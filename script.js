@@ -31,3 +31,10 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   
   });
+  function showDateTime(){
+    var date = new Date();
+    var time = date.toLocaleTimeString();
+    var dateTime = time.toLocaleString();
+    document.getElementsByClassName("time").innerHTML = dateTime;
+    setTimeout(showDateTime, 1000);
+  }
