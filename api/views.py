@@ -15,9 +15,10 @@ def datesplit(date):
         return "October "+date[2]
 def csvupload(request):
      template = 'csvupload.html'
-    #  data = Profile.objects.all()
+     data = Profile.objects.all()
      prompt = {
-        'order': 'Order of the CSV should be name,email,institution,date_joined,EntrolmentStatus,qwicklabsurl,track1,track2',   
+        'order': 'Order of the CSV should be name,email,institution,date_joined,EntrolmentStatus,qwicklabsurl,track1,track2',
+        'profiles': data    
               }
      if request.method == 'GET':
          return render(request, template, prompt)
@@ -44,28 +45,28 @@ def csvupload(request):
      
 ################################################################
  
-# class ProfileViewSet(viewsets.ModelViewSet):
-#     queryset = Profile.objects.order_by('track1' , 'track2').reverse()
-#     serializer_class = ProfileSerializer  
-# class statusViewSet(viewsets.ViewSet):
-#     def list(self, request):
-#         queryset =  Profile.objects.all()
-#         serializer = ProfileSerializer(queryset, many=True)
-#         bothtracks=int()
-#         anyonetrack=int()
-#         for i in serializer.data:
-#             if i['track1']==6 and i['track2']==6:
-#                 bothtracks+=1
-#             if i['track1']==6 or i['track2']==6:
-#                 anyonetrack+=1
-#         return Response(
-#             {
-#             'bothtracks':bothtracks,
-#             'anyonetrack':anyonetrack,
-#             'time':"October 27"
-#             }
-#             )
+class ProfileViewSet(viewsets.ModelViewSet):
+    queryset = Profile.objects.order_by('track1' , 'track2').reverse()
+    serializer_class = ProfileSerializer  
+class statusViewSet(viewsets.ViewSet):
+    def list(self, request):
+        queryset =  Profile.objects.all()
+        serializer = ProfileSerializer(queryset, many=True)
+        bothtracks=int()
+        anyonetrack=int()
+        for i in serializer.data:
+            if i['track1']==6 and i['track2']==6:
+                bothtracks+=1
+            if i['track1']==6 or i['track2']==6:
+                anyonetrack+=1
+        return Response(
+            {
+            'bothtracks':bothtracks,
+            'anyonetrack':anyonetrack,
+            'time':"October 27"
+            }
+            )
     
 router = routers.DefaultRouter()
-# router.register('Profile', ProfileViewSet)
-# router.register('status',statusViewSet,basename='status')
+router.register('Profile', ProfileViewSet)
+router.register('status',statusViewSet,basename='status')
