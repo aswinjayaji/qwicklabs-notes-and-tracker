@@ -9,11 +9,11 @@ async function getUsers() {
   }
 }
 async function renderUser() {
-  const colors=["#3cba54","#f4c20d","#db3236","#4885ed"]
+  const colors=[" #DB4437"," #4285F4","#0F9D58","#F4B400","#FF3B30","#9C27B0","#2196F3","#009688","#FF9800","#795548","#607D8B","#E91E63","#9E9E9E","#F44336","#3F51B5","#2196F3","#4CAF50","#FFEB3B","#FFC107","#FF5722","#795548","#607D8B","#E91E63","#9E9E9E","#F44336","#3F51B5","#2196F3","#4CAF50","#FFEB3B","#FFC107","#FF5722","#795548","#607D8B","#E91E63","#9E9E9E","#F44336","#3F51B5","#2196F3","#4CAF50","#FFEB3B","#FFC107","#FF5722","#795548","#607D8B","#E91E63","#9E9E9E","#F44336","#3F51B5","#2196F3","#4CAF50","#FFEB3B","#FFC107","#FF5722","#795548","#607D8B"];
   let apiResult = await getUsers();
   const container = document.getElementById('iteratorcard');
-  let i = 0;
-  apiResult.forEach((result, idx) => {
+  let i = 0,j=0;
+  apiResult.forEach((result) => {
     // Create card element
     const card = document.createElement('div');
     card.classList = 'project-box-wrapper';
@@ -53,7 +53,7 @@ let content =
     <div class="box-progress-bar">
       <span
         class="box-progress"
-        style="width: ${parseInt((result.track1/6)*100)}%; background-color: #ff942e"
+        style="width: ${parseInt((result.track1/6)*100)}%; background-color: #7F00FF"
       ></span>
     </div>
     <p class="box-progress-percentage">${parseInt((result.track1/6)*100)}%</p>
@@ -63,7 +63,7 @@ let content =
     <div class="box-progress-bar">
       <span
         class="box-progress"
-        style="width: ${parseInt((result.track2/6)*100)}%; background-color: #ff942e"
+        style="width: ${parseInt((result.track2/6)*100)}%; background-color: #7F00FF"
       ></span>
     </div>
     <p class="box-progress-percentage">${parseInt((result.track2/6)*100)}%</p>
@@ -75,7 +75,8 @@ let content =
   </div>
 </div>
 </div>`;
-    if(result.track1>1){
+    if(j<150){
+      j++;
       if(i==3)
         i=0;
       else
