@@ -99,28 +99,11 @@ button, a {
 .app-header-right button {
   margin-left: 10px;
 }
-.app-icon {
-  width: 26px;
-  height: 2px;
-  border-radius: 4px;
-  background-color: var(--main-color);
-  position: relative;
-}
-.app-icon:before, .app-icon:after {
-  content: "";
-  position: absolute;
-  width: 12px;
-  height: 2px;
-  border-radius: 4px;
-  background-color: var(--main-color);
-  left: 50%;
-  transform: translatex(-50%);
-}
-.app-icon:before {
-  top: -6px;
-}
-.app-icon:after {
-  bottom: -6px;
+.app-icon img{
+  width:90px;
+  height:58px;
+  top:0;
+  right:0; 
 }
 .app-name {
   color: var(--main-color);
@@ -208,10 +191,10 @@ button, a {
   border-left: 2px solid #ddd;
 }
 .profile-btn img {
-  width: 32px;
-  height: 32px;
-  -o-object-fit: cover;
-     object-fit: cover;
+  width: 40px;
+  height: 30px;
+  /* -o-object-fit:cover;
+     object-fit: cover; */
   border-radius: 50%;
   margin-right: 4px;
 }
@@ -377,8 +360,14 @@ button, a {
   top: 16px;
 }
 .project-boxes.jsListView .project-box-content-header {
+  white-space: nowrap; 
   order: 1;
-  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 120px;
+}
+.project-boxes.jsListView .project-box-content-header:hover {
+  overflow: visible;
 }
 .project-boxes.jsListView .project-box-header {
   order: 2;
@@ -426,7 +415,7 @@ button, a {
   color: var(--main-color);
 }
 .project-box-header span {
-  color: #4A4A4A;
+  color: #141414;
   opacity: 0.7;
   font-size: 14px;
   line-height: 16px;
@@ -564,6 +553,11 @@ button, a {
   flex-shrink: 0;
   padding: 4px 10px;
   font-weight: 700;
+  text-decoration: none;
+}
+.days-left a:link, .days-left a:visited, .days-left a:hover, .days-left a:active, .days-left a:focus {
+  text-decoration: none;
+  color:black;
 }
 
 .mode-switch.active .moon {

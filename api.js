@@ -11,7 +11,6 @@ async function getUsers() {
 async function renderUser() {
   const colors=["#3cba54","#f4c20d","#db3236","#4885ed"]
   let apiResult = await getUsers();
-  console.log(apiResult);
   const container = document.getElementById('iteratorcard');
   let i = 0;
   apiResult.forEach((result, idx) => {
@@ -23,7 +22,7 @@ let content =
 `<div class='project-box-wrapper'>
 <div class="project-box" style="background-color:${colors[i]} ">
   <div class="project-box-header">
-    <span>${result.date_joined}</span>
+    <span>Date Joined: ${result.date_joined}</span>
     <div class="more-wrapper">
       <button class="project-btn-more">
         <svg
@@ -71,7 +70,7 @@ let content =
   </div>
   <div class="project-box-footer">
     <button class="days-left" >
-      View Profile
+    <a href="${result.qwicklabsurl}">Visit Profile</a>
     </button>
   </div>
 </div>
@@ -86,4 +85,37 @@ let content =
     
   });
 }
+
+
+async function getstatus() {
+  let url = 'http://127.0.0.1:8000/status/';
+  try {
+      let res = await fetch(url);
+      console.log(res);
+      return await res.json();
+  } catch (error) {
+      console.log(error);
+  }
+}
+
+async function renderstatus(){
+  const containerstatus = document.getElementById('track-status');
+  const containertime=document.getElementById('time');
+  let statusapiResult = await getstatus();
+  console.log(statusapiResult);
+    let content =`
+      <div class="item-status">
+       <span class="status-number">${statusapiResult.bothtracks}</span>
+        <span class="status-type">Completed Both Tracks</span>
+      </div>
+      <div class="item-status">
+        <span class="status-number">${statusapiResult.anyonetrack}</span>
+        <span class="status-type">Completed Any One Track</span>
+      </div>
+    `;
+  containertime.innerHTML=`${statusapiResult.time}`;
+  containerstatus.innerHTML+=content;
+
+}
+renderstatus();
 renderUser();
