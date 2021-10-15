@@ -114,7 +114,7 @@ async function renderstatus(){
         <span class="status-type">Completed Any One Track</span>
       </div>
     `;
-  containertime.innerHTML=`${statusapiResult.time}`;
+  containertime.innerHTML=`Date of Completion: ${statusapiResult.time}`;
   containerstatus.innerHTML+=content;
 
 }
