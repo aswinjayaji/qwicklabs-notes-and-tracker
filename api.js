@@ -9,7 +9,7 @@ async function getUsers() {
   }
 }
 async function renderUser() {
-  const colors=[" #DB4437"," #4285F4","#0F9D58","#F4B400","#FF3B30","#9C27B0","#2196F3","#009688","#FF9800","#795548","#607D8B","#E91E63","#9E9E9E","#F44336","#3F51B5","#2196F3","#4CAF50","#FFEB3B","#FFC107","#FF5722","#795548","#607D8B","#E91E63","#9E9E9E","#F44336","#3F51B5","#2196F3","#4CAF50","#FFEB3B","#FFC107","#FF5722","#795548","#607D8B","#E91E63","#9E9E9E","#F44336","#3F51B5","#2196F3","#4CAF50","#FFEB3B","#FFC107","#FF5722","#795548","#607D8B","#E91E63","#9E9E9E","#F44336","#3F51B5","#2196F3","#4CAF50","#FFEB3B","#FFC107","#FF5722","#795548","#607D8B"];
+  const colors=[" #DB4437"," #4285F4","#0F9D58","#F4B400"];
   let apiResult = await getUsers();
   const container = document.getElementById('iteratorcard');
   let i = 0,j=0;
