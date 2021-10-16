@@ -488,13 +488,26 @@ button, a {
 
 .box-progress {
   display: block;
-  height: 4px;
-  border-radius: 6px;
+  height: 100%;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  background-color: #7F00FF;
+  background-image: linear-gradient(
+    center bottom,
+    rgb(19, 83, 36) 37%,
+    rgb(84, 240, 84) 69%
+  );
+  box-shadow: inset 0 2px 9px rgba(255, 255, 255, 0.3),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.4);
+  position: relative;
+  overflow: hidden;
 }
 .box-progress-bar {
   width: 100%;
-  height: 4px;
-  border-radius: 6px;
+  height: 10px;
+  border-radius: 9px;
   overflow: hidden;
   background-color: #fff;
   margin: 8px 0;

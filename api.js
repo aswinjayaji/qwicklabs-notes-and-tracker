@@ -65,7 +65,7 @@ let content =
     <div class="box-progress-bar">
       <span
         class="box-progress"
-        style="width: ${parseInt((result.track1/6)*100)}%; background-color: #7F00FF"
+        style="width: ${parseInt((result.track1/6)*100)}%; "
       ></span>
     </div>
     <p class="box-progress-percentage">${parseInt((result.track1/6)*100)}%</p>
@@ -75,7 +75,7 @@ let content =
     <div class="box-progress-bar">
       <span
         class="box-progress"
-        style="width: ${parseInt((result.track2/6)*100)}%; background-color: #7F00FF"
+        style="width: ${parseInt((result.track2/6)*100)}%;"
       ></span>
     </div>
     <p class="box-progress-percentage">${parseInt((result.track2/6)*100)}%</p>
