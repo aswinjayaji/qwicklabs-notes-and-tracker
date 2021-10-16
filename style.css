@@ -753,3 +753,43 @@ button, a {
     top: 10px;
   }
 }
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px
+}
+
+.wrapper .ball {
+  width: 22px;
+  height: 22px;
+  border-radius: 11px;
+  margin: 0 10px;
+  
+  animation: 2s bounce ease infinite;
+}
+
+.wrapper .blue {
+  background-color: #4285F5;
+}
+
+.wrapper .red {
+  background-color: #EA4436;
+  animation-delay: .25s;
+}
+
+.wrapper .yellow {
+  background-color: #FBBD06;
+  animation-delay: .5s;
+}
+
+.wrapper .green {
+  background-color: #34A952;
+  animation-delay: .75s;
+}
+
+@keyframes bounce {  
+    50% {
+        transform: translateY(25px);
+    }
+}

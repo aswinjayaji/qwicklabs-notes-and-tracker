@@ -13,8 +13,9 @@
           </span>
           <p class="app-name">#30DaysofGoogleCloud</p>
           <div class="search-wrapper">
-            <input class="search-input" type="text" placeholder="Search" />
+            <input id="search-input" class="search-input" onkeypress="search()" type="text"  placeholder="Search" />
             <svg
+              onclick="search()"
               xmlns="http://www.w3.org/2000/svg"
               width="20"
               height="20"
