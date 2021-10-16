@@ -754,7 +754,7 @@ button, a {
   }
 }
 .wrapper {
-  display: flex;
+  margin: auto;
   justify-content: center;
   align-items: center;
   height: 200px
@@ -765,7 +765,6 @@ button, a {
   height: 22px;
   border-radius: 11px;
   margin: 0 10px;
-  
   animation: 2s bounce ease infinite;
 }
 

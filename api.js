@@ -1,6 +1,6 @@
-
+let x=0;
 let loading=
-`<div class="wrapper">
+`<div id="wrap" class="wrapper" style="display:flex;">
   <div class="blue ball"></div>
   <div class="red ball"></div>  
   <div class="yellow ball"></div>  
@@ -18,9 +18,12 @@ async function getUsers() {
   }
 }
 async function renderUser() {
-  
-  let apiResult = await getUsers();
   const container = document.getElementById('iteratorcard');
+  container.innerHTML=loading;
+  const loader = document.getElementById('wrap')
+  loader.style.display = 'flex';
+  let apiResult = await getUsers();
+  loader.style.display = 'none';
   let i = 0,j=0;
   apiResult.forEach((result) => {
     // Create card element
@@ -125,15 +128,19 @@ async function renderstatus(){
     `;
   containertime.innerHTML=`Date of Completion: ${statusapiResult.time}`;
   containerstatus.innerHTML+=content;
-
+  return 1;
 }
-renderstatus();
+
+renderstatus();  
+
 renderUser();
+
+
 async function search(){
-  const result=await getUsers();
+  const apiresult=await getUsers();
   const container = document.getElementById('iteratorcard');
   let input=document.getElementById("search-input").value
-  result.forEach((result) => {
+  apiresult.forEach((result) => {
     // Create card element
     const card = document.createElement('div');
     card.classList = 'project-box-wrapper';
