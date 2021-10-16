@@ -26,6 +26,7 @@ def csvupload(request):
      if not csv_file.name.endswith('.csv'):
             messages.error(request, 'THIS IS NOT A CSV FILE')
      data_set = csv_file.read().decode('UTF-8')
+     Profile.objects.all().delete()
      io_string = io.StringIO(data_set)
      next(io_string)
      for column in csv.reader(io_string, skipinitialspace=True):
