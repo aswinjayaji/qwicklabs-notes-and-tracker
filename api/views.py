@@ -6,10 +6,9 @@ from api.models import Profile
 from api.serializers import ProfileSerializer
 from rest_framework import routers, viewsets
 from rest_framework.response import Response
-import environ,hashlib
+import environ,hashlib,os
 # Initialise environment variables
-env = environ.Env()
-environ.Env.read_env()
+envpassword=os.environ.get('PASSWORD')
 
 
 def datesplit(date):
@@ -27,7 +26,8 @@ def csvupload(request):
          return render(request, template, prompt)
      csv_file = request.FILES['file']
      password = request.POST['password']
-     if hashlib.sha256(password.encode()).hexdigest()!=env('password'):
+     print(envpassword)
+     if hashlib.sha256(password.encode()).hexdigest()!=envpassword:
          passw={
              'success':'password incorrect'
          }
