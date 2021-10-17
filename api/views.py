@@ -6,7 +6,7 @@ from api.models import Profile
 from api.serializers import ProfileSerializer
 from rest_framework import routers, viewsets
 from rest_framework.response import Response
-import environ,hashlib,os
+import hashlib,os
 # Initialise environment variables
 envpassword=os.environ.get('PASSWORD')
 
