@@ -6,6 +6,11 @@ from api.models import Profile
 from api.serializers import ProfileSerializer
 from rest_framework import routers, viewsets
 from rest_framework.response import Response
+import environ,hashlib
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env()
+
 
 def datesplit(date):
     date = date.split(" ")
@@ -15,14 +20,18 @@ def datesplit(date):
         return "October "+date[2]
 def csvupload(request):
      template = 'csvupload.html'
-     data = Profile.objects.all()
      prompt = {
-        'order': 'Order of the CSV should be name,email,institution,date_joined,EntrolmentStatus,qwicklabsurl,track1,track2',
-        'profiles': data    
+        'order': 'Order of the CSV should be name,email,institution,date_joined,EntrolmentStatus,qwicklabsurl,track1,track2'
               }
      if request.method == 'GET':
          return render(request, template, prompt)
      csv_file = request.FILES['file']
+     password = request.POST['password']
+     if hashlib.sha256(password.encode()).hexdigest()!=env('password'):
+         passw={
+             'success':'password incorrect'
+         }
+         return render(request, template, passw)
      if not csv_file.name.endswith('.csv'):
             messages.error(request, 'THIS IS NOT A CSV FILE')
      data_set = csv_file.read().decode('UTF-8')
@@ -41,7 +50,9 @@ def csvupload(request):
             track2=column[7],
             defaults={"studentname":column[0]},
         )
-     context = {}
+     context = {
+         'success':'  file uploaded successfully'
+     }
      return render(request, template, context)
      
 ################################################################
