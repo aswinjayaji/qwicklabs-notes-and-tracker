@@ -5,3 +5,4 @@ api/__pycache__
 trackerapp/__init__.py
 db.sqlite3
 api/.env
+run.sh
